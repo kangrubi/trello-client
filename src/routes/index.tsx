@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import App from "../App";
-import authRoutes from "../features/auth";
+import authRoutes from "../features/auth/routes";
 
 const rootRoutes: RouteObject[] = [
   {
