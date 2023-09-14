@@ -1,1 +1,4 @@
-무나 짱
+## Trello project
+
+Backend: Muna
+frontend: Ruby
