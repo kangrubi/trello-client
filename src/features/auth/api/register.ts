@@ -7,8 +7,6 @@ export type RegisterRequestDTO = {
   password: string;
 };
 
-export const registerWithEmailAndPassword = (
-  request: RegisterRequestDTO
-): Promise<UserResponse> => {
-  return axiosInstance.post("/auth/register", request);
+export const registerWithEmailAndPassword = (request: RegisterRequestDTO) => {
+  return axiosInstance.post<UserResponse>("/auth/register", request);
 };
