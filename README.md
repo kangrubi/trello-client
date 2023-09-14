@@ -1,4 +1,3 @@
 ## Trello project
 
-Backend: Muna
-frontend: Ruby
+Backend: Muna, frontend: Ruby
