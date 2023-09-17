@@ -1,7 +1,12 @@
 import React from "react";
+import { useAuth } from "../hooks/useAuth";
 
 const RegisterForm = () => {
-  return <div></div>;
+  // const { register } = useAuth();
+
+  console.log("gg");
+
+  return <>ㅇㅇ</>;
 };
 
 export default RegisterForm;
