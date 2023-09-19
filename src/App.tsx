@@ -24,12 +24,16 @@ function App() {
   }, []);
 
   const handleClickLogout = async () => {
-    const refreshToken = storage.getToken().refreshToken;
-    await postLogout(refreshToken);
+    if (isLogin) {
+      const refreshToken = storage.getToken().refreshToken;
+      await postLogout(refreshToken);
 
-    storage.clearToken();
-    signOut();
-    navigate("/login");
+      storage.clearToken();
+
+      signOut();
+
+      navigate("/login");
+    }
   };
 
   return (
