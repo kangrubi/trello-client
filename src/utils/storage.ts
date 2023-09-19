@@ -4,7 +4,7 @@ export const storage = {
   getToken: () => {
     return JSON.parse(
       window.localStorage.getItem(`${storagePrefix}token`) as string
-    );
+    ) as { accessToken: string; refreshToken: string };
   },
   setToken: ({
     accessToken,
