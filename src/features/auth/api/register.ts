@@ -1,4 +1,3 @@
-import { UserResponse } from "..";
 import { axiosInstance } from "../../../lib/axios";
 
 export type RegisterRequestDTO = {
@@ -8,5 +7,5 @@ export type RegisterRequestDTO = {
 };
 
 export const postRegister = (request: RegisterRequestDTO) => {
-  return axiosInstance.post<UserResponse>("/auth/register", request);
+  return axiosInstance.post("/auth/register", request);
 };
