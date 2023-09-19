@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserResponse } from "..";
 import { storage } from "../../../utils/storage";
 import { RegisterRequestDTO, postRegister } from "../api/register";
 import { AxiosError } from "axios";
 import { LoginRequestDTO, postLogin } from "../api/login";
+import { useAuthStore } from "@/stores/authStore";
 
 type Error = {
   statusCode: number;
@@ -15,7 +16,9 @@ type Error = {
 
 export const useAuth = () => {
   const [error, setError] = useState<Error>();
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const signIn = useAuthStore((state) => state.signIn);
+  const signOut = useAuthStore((state) => state.signOut);
 
   const handleUserResponse = (request: UserResponse) => {
     const { user, accessToken, refreshToken } = request;
@@ -37,21 +40,12 @@ export const useAuth = () => {
     try {
       const response = await postLogin(request);
       handleUserResponse(response.data);
+      signIn();
     } catch (error: unknown) {
       const _error = error as AxiosError<Error>;
       setError(_error.response?.data);
     }
   };
 
-  useEffect(() => {
-    const token = storage.getToken();
-
-    if (token.accessToken) {
-      setIsLogin(true);
-
-      // axios에서 header에 bearer토큰을 넣을 수 있도록 인터셉터를 작성해줘야 함
-    }
-  }, []);
-
-  return { isLogin, error, signUp, login };
+  return { isLogin, error, signUp, login, signIn, signOut };
 };
