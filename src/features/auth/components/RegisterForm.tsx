@@ -25,7 +25,7 @@ const RegisterForm = () => {
   };
 
   useEffect(() => {
-    if (error) alert(error.errorCodes.message.join(" "));
+    if (error) alert(error.error);
   }, [error]);
 
   return (
