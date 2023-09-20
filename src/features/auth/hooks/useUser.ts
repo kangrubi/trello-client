@@ -1,16 +1,9 @@
 import { getProfile } from "@/features/user/api/profile";
-import { useState } from "react";
-
-interface Profile {
-  id: number;
-  username: string;
-  email: string;
-  profileImage?: string;
-  createdAt: string;
-}
+import { useUserStore } from "@/stores/userStore";
 
 export const useUser = () => {
-  const [profile, setProfile] = useState<Profile>();
+  const profile = useUserStore((state) => state.profile);
+  const setProfile = useUserStore((state) => state.setProfile);
 
   const userProfile = async () => {
     try {
