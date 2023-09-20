@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib/axios";
-import { storage } from "@/utils/storage";
 
 interface GetProfileResponse {
   id: number;
@@ -10,9 +9,5 @@ interface GetProfileResponse {
 }
 
 export const getProfile = () => {
-  return axiosInstance.get<GetProfileResponse>("/user/profile", {
-    headers: {
-      Authorization: `Bearer ${storage.getToken().accessToken}`,
-    },
-  });
+  return axiosInstance.get<GetProfileResponse>("/user/profile");
 };
