@@ -1,47 +1,37 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
 import { useEffect } from "react";
 import { getProfile } from "./features/user/api/profile";
-import { postLogout } from "./features/auth/api/logout";
-import { storage } from "./utils/storage";
 
 function App() {
   const { isLogin, signIn, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (isLogin) return;
-
-    (async () => {
-      try {
-        await getProfile();
-        signIn();
-      } catch (error) {
-        signOut();
-        navigate("/login");
+    if (location.pathname === "/") {
+      if (isLogin) {
+        navigate("/home");
+        return;
       }
-    })();
-  }, []);
-
-  const handleClickLogout = async () => {
-    if (isLogin) {
-      const refreshToken = storage.getToken().refreshToken;
-      await postLogout(refreshToken);
-
-      storage.clearToken();
-
-      signOut();
-
-      navigate("/login");
     }
-  };
+
+    if (!isLogin) {
+      (async () => {
+        try {
+          await getProfile();
+          signIn();
+        } catch (error) {
+          signOut();
+          navigate("/login");
+        }
+      })();
+    }
+  }, [isLogin, location.pathname, navigate, signIn, signOut]);
 
   return (
     <>
       <Outlet />
-      <button type="button" onClick={handleClickLogout}>
-        로그아웃
-      </button>
     </>
   );
 }
