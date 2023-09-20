@@ -20,7 +20,7 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
 
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<LoginFormData> = async (
     data: LoginFormData
@@ -30,9 +30,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isLogin) {
-      navigation("/");
+      navigate("/home");
     }
-  }, [navigation, isLogin]);
+  }, [navigate, isLogin]);
 
   useEffect(() => {
     if (error) alert(error.error);
