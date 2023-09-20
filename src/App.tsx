@@ -1,10 +1,11 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./features/auth/hooks/useAuth";
 import { useEffect } from "react";
-import { getProfile } from "./features/user/api/profile";
+import { useUser } from "./features/auth/hooks/useUser";
 
 function App() {
   const { isLogin, signIn, signOut } = useAuth();
+  const { userProfile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,7 +20,7 @@ function App() {
     if (!isLogin) {
       (async () => {
         try {
-          await getProfile();
+          await userProfile();
           signIn();
         } catch (error) {
           signOut();
