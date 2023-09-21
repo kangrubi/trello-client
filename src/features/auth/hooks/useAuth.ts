@@ -5,17 +5,10 @@ import { RegisterRequestDTO, postRegister } from "../api/register";
 import { AxiosError } from "axios";
 import { LoginRequestDTO, postLogin } from "../api/login";
 import { useAuthStore } from "@/stores/authStore";
-
-type Error = {
-  statusCode: number;
-  timestamp: string;
-  path: string;
-  error: string;
-  message: string;
-};
+import { CustomError } from "..";
 
 export const useAuth = () => {
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<CustomError>();
   const isLogin = useAuthStore((state) => state.isLogin);
   const signIn = useAuthStore((state) => state.signIn);
   const signOut = useAuthStore((state) => state.signOut);
@@ -31,7 +24,7 @@ export const useAuth = () => {
       const response = await postRegister(request);
       return response;
     } catch (error: unknown) {
-      const _error = error as AxiosError<Error>;
+      const _error = error as AxiosError<CustomError>;
       setError(_error.response?.data);
     }
   };
@@ -42,7 +35,7 @@ export const useAuth = () => {
       handleUserResponse(response.data);
       signIn();
     } catch (error: unknown) {
-      const _error = error as AxiosError<Error>;
+      const _error = error as AxiosError<CustomError>;
       setError(_error.response?.data);
     }
   };
