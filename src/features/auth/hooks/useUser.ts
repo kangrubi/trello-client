@@ -5,7 +5,7 @@ export const useUser = () => {
   const profile = useUserStore((state) => state.profile);
   const setProfile = useUserStore((state) => state.setProfile);
 
-  const userProfile = async () => {
+  const fetchUserProfile = async () => {
     try {
       const response = await getProfile();
 
@@ -15,5 +15,5 @@ export const useUser = () => {
     }
   };
 
-  return { profile, userProfile };
+  return { profile, fetchUserProfile };
 };
