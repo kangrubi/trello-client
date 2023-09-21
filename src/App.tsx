@@ -5,7 +5,7 @@ import { useUser } from "./features/auth/hooks/useUser";
 
 function App() {
   const { isLogin, signIn, signOut } = useAuth();
-  const { userProfile } = useUser();
+  const { fetchUserProfile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,7 +20,7 @@ function App() {
     if (!isLogin) {
       (async () => {
         try {
-          await userProfile();
+          await fetchUserProfile();
           signIn();
         } catch (error) {
           signOut();
