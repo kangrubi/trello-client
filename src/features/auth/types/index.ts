@@ -13,3 +13,11 @@ export type UserResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type CustomError = {
+  statusCode: number;
+  timestamp: string;
+  path: string;
+  error: string;
+  message: string;
+};
