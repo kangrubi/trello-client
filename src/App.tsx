@@ -5,7 +5,7 @@ import { useUser } from "./features/auth/hooks/useUser";
 
 function App() {
   const { isLogin, signIn, signOut } = useAuth();
-  const { fetchUserProfile } = useUser();
+  const { fetchUserProfile, profile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,18 +17,21 @@ function App() {
       }
     }
 
-    if (!isLogin) {
-      (async () => {
-        try {
-          await fetchUserProfile();
-          signIn();
-        } catch (error) {
-          signOut();
-          navigate("/login");
-        }
-      })();
+    (async () => {
+      await fetchUserProfile();
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!profile) return;
+
+    if (profile.id !== -1) {
+      signIn();
+    } else {
+      signOut();
+      navigate("/login");
     }
-  }, [isLogin, location.pathname, navigate, signIn, signOut]);
+  }, [navigate, profile, signIn, signOut]);
 
   return (
     <>
