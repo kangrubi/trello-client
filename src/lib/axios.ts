@@ -1,7 +1,6 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { API_URL } from "../config";
 import { storage } from "@/utils/storage";
-import { CustomError } from "@/features/auth";
 import { postRefresh } from "@/features/auth/api/refresh";
 
 export const axiosInstance = axios.create({
@@ -23,40 +22,40 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+interface RetryableAxiosRequestConfig extends AxiosRequestConfig {
+  _retry: boolean;
+}
+
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error: unknown) => {
-    const customError = error as AxiosError<CustomError>;
-    const originalRequest = customError.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableAxiosRequestConfig;
 
-    if (customError.response) {
-      if (!originalRequest) return;
-      if (customError.response.status === 401 && !originalRequest._retry) {
-        try {
-          const token = storage.getToken();
-          console.log(token);
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
-          if (token) {
-            // const response = await postRefresh(token.refreshToken);
-            // if (!customError.config) return;
-            // customError.config.headers[
-            //   "Authorization"
-            // ] = `Bearer ${response.data.newRefreshToken}`;
-            // storage.setToken({
-            //   accessToken: response.data.accessToken,
-            //   refreshToken: response.data.newRefreshToken,
-            // });
-          } else {
-            storage.clearToken();
-          }
-        } catch (error) {
-          storage.clearToken();
-        }
+    if (error.response?.status === 401 && !originalRequest?._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const { data } = await postRefresh(storage.getToken().refreshToken);
+
+        storage.setToken({
+          accessToken: data.accessToken,
+          refreshToken: data.newRefreshToken,
+        });
+
+        return axiosInstance(originalRequest);
+      } catch (error) {
+        storage.clearToken();
+
+        return Promise.reject(new Error("Unauthorized"));
       }
     }
 
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );
