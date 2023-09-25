@@ -10,11 +10,11 @@ interface RegisterResponse {
 interface RegisterParams {
   username: string;
   email: string;
-  profileImage: string;
+  password: string;
 }
 
-export const postRegister = (params: RegisterParams) => {
-  return axiosInstance.post<PublicApiResponse<RegisterResponse>>(
+export const postRegister = async (params: RegisterParams) => {
+  return await axiosInstance.post<PublicApiResponse<RegisterResponse>>(
     "/api/v1/auth/register",
     params
   );
