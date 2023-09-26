@@ -3,3 +3,13 @@ export interface PublicApiResponse<T> {
   data: T;
   timestamp: string;
 }
+
+export type CustomError = {
+  statusCode: number;
+  message: {
+    message: string;
+    statusCode: number;
+  };
+  timestamp: string;
+  path: string;
+};
