@@ -24,7 +24,7 @@ const Register = () => {
     const response = await fetchRegister(data);
 
     if (response?.status === 201) {
-      navigate("/home");
+      navigate("/login");
     }
   };
 
