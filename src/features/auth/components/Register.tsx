@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { postRegister } from "../api/register";
 import { useNavigate } from "react-router-dom";
 
-type RegisterRequest = {
+type RegisterForm = {
   username: string;
   email: string;
   password: string;
@@ -13,13 +13,11 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterRequest>();
+  } = useForm<RegisterForm>();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<RegisterRequest> = async (
-    data: RegisterRequest
-  ) => {
+  const onSubmit: SubmitHandler<RegisterForm> = async (data: RegisterForm) => {
     await postRegister(data);
 
     navigate("/home");
