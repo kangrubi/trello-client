@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { postRegister } from "../api/register";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 type RegisterForm = {
   username: string;
@@ -17,11 +18,21 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<RegisterForm> = async (data: RegisterForm) => {
-    await postRegister(data);
+  const { error, fetchRegister } = useAuth();
 
-    navigate("/home");
+  const onSubmit: SubmitHandler<RegisterForm> = async (data: RegisterForm) => {
+    const response = await fetchRegister(data);
+
+    if (response?.status === 201) {
+      navigate("/home");
+    }
   };
+
+  useEffect(() => {
+    if (error) {
+      alert(error.message.message);
+    }
+  }, [error]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
