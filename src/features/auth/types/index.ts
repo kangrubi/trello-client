@@ -1,5 +1,5 @@
 export interface PublicApiResponse<T> {
-  statusCode: string;
+  statusCode: number;
   data: T;
   timestamp: string;
 }
