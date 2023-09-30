@@ -1,4 +1,5 @@
 import { axiosInstance } from "../../../lib/axios";
+import { PublicApiResponse } from "../../auth/types";
 
 interface ProfileResponse {
   username: string;
@@ -6,6 +7,15 @@ interface ProfileResponse {
   profileImage?: string;
 }
 
-export const getProfile = async () => {
-  return axiosInstance.get<ProfileResponse>("/api/v1/user/profile");
+export const getProfile = async (accessToken: string) => {
+  const { data } = await axiosInstance.get<PublicApiResponse<ProfileResponse>>(
+    "/api/v1/user/profile",
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  return data;
 };

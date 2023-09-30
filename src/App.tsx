@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "./features/auth/hooks/useAuth";
+import useUser from "./features/user/hooks/useUser";
 
 const App = () => {
   const { signIn, signOut, isLogin } = useAuth();
+  const { profile, fetchGetProfile } = useUser();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,8 +17,24 @@ const App = () => {
         return;
       }
     }
-    console.log(isLogin);
-  }, []);
+
+    (async () => {
+      await fetchGetProfile();
+    })();
+  }, [isLogin]);
+
+  useEffect(() => {
+    if (!profile) return;
+
+    if (profile !== undefined) {
+      signIn();
+    } else {
+      signOut();
+      navigate("/login");
+    }
+  }, [navigate, profile, signIn, signOut]);
+
+  console.log(isLogin);
 
   return (
     <>

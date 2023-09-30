@@ -1,7 +1,10 @@
 import React from "react";
+import useUser from "../features/user/hooks/useUser";
 
 const Home = () => {
-  return <div>home</div>;
+  const { profile } = useUser();
+
+  return <div>{profile?.username}</div>;
 };
 
 export default Home;
