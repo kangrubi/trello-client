@@ -3,6 +3,7 @@ import { postRegister } from "../api/register";
 import { CustomError } from "../types";
 import { useState } from "react";
 import { postLogin } from "../api/login";
+import { useAuthStore } from "../../../stores/authStore";
 
 interface RegisterData {
   username: string;
@@ -17,6 +18,9 @@ interface LoginData {
 
 const useAuth = () => {
   const [error, setError] = useState<CustomError>();
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const signIn = useAuthStore((state) => state.signIn);
+  const signOut = useAuthStore((state) => state.signOut);
 
   const fetchRegister = async (data: RegisterData) => {
     try {
@@ -35,7 +39,7 @@ const useAuth = () => {
   const fetchLogin = async (data: LoginData) => {
     try {
       const response = await postLogin(data);
-
+      signIn();
       return response;
     } catch (error: unknown) {
       const _error = error as AxiosError<CustomError>;
@@ -46,7 +50,7 @@ const useAuth = () => {
     }
   };
 
-  return { error, fetchRegister, fetchLogin };
+  return { error, isLogin, fetchRegister, fetchLogin, signIn, signOut };
 };
 
 export default useAuth;

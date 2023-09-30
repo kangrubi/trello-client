@@ -16,7 +16,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginForm>();
 
-  const { error, fetchLogin } = useAuth();
+  const { error, fetchLogin, isLogin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -24,11 +24,15 @@ const Login = () => {
     const response = await fetchLogin(data);
 
     if (response?.status === 200) {
-      navigate("/home");
-
       storage.setToken(response.data.data.accessToken);
     }
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/home");
+    }
+  }, [navigate, isLogin]);
 
   useEffect(() => {
     if (error) alert(error.message.message);
