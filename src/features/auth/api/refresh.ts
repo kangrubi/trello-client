@@ -1,9 +1,5 @@
 import { axiosInstance } from "../../../lib/axios";
-import { PublicApiResponse } from "../types";
-
-interface GetRefreshResponse {
-  accessToken: string;
-}
+import { GetRefreshResponse, PublicApiResponse } from "../types";
 
 export const getRefresh = async () => {
   return axiosInstance.get<PublicApiResponse<GetRefreshResponse>>(
