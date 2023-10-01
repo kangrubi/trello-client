@@ -4,6 +4,10 @@ export interface PublicApiResponse<T> {
   timestamp: string;
 }
 
+export interface GetRefreshResponse {
+  accessToken: string;
+}
+
 export type CustomError = {
   statusCode: number;
   message: {
