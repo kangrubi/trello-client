@@ -8,9 +8,7 @@ interface ProfileResponse {
 }
 
 export const getProfile = async () => {
-  const { data } = await axiosInstance.get<PublicApiResponse<ProfileResponse>>(
+  return axiosInstance.get<PublicApiResponse<ProfileResponse>>(
     "/api/v1/user/profile"
   );
-
-  return data;
 };
