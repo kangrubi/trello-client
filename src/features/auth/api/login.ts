@@ -13,6 +13,9 @@ interface LoginResponse {
 export const postLogin = (params: LoginParams) => {
   return axiosInstance.post<PublicApiResponse<LoginResponse>>(
     "/api/v1/auth/login",
-    params
+    params,
+    {
+      withCredentials: true,
+    }
   );
 };
