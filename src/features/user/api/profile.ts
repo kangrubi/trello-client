@@ -7,14 +7,9 @@ interface ProfileResponse {
   profileImage?: string;
 }
 
-export const getProfile = async (accessToken: string) => {
+export const getProfile = async () => {
   const { data } = await axiosInstance.get<PublicApiResponse<ProfileResponse>>(
-    "/api/v1/user/profile",
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
+    "/api/v1/user/profile"
   );
 
   return data;
