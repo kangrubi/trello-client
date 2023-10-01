@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getProfile } from "../api/profile";
-import { storage } from "../../../utils/storage";
 import { AxiosError } from "axios";
 import { CustomError } from "../../auth/types";
 import { useUserStore } from "../../../stores/userStore";
@@ -12,12 +11,10 @@ const useUser = () => {
 
   const fetchGetProfile = async () => {
     try {
-      const token = storage.getToken();
+      const response = await getProfile();
 
-      const response = await getProfile(token);
-
-      if (response.statusCode === 200) {
-        setProfile(response.data);
+      if (response.status === 200) {
+        setProfile(response.data.data);
       }
     } catch (error: unknown) {
       const _error = error as AxiosError<CustomError>;
