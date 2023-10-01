@@ -11,16 +11,18 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    (async () => {
+      await fetchGetProfile();
+    })();
+  }, []);
+
+  useEffect(() => {
     if (location.pathname === "/") {
       if (isLogin) {
         navigate("/home");
         return;
       }
     }
-
-    (async () => {
-      await fetchGetProfile();
-    })();
   }, [isLogin]);
 
   useEffect(() => {
@@ -33,8 +35,6 @@ const App = () => {
       navigate("/login");
     }
   }, [navigate, profile, signIn, signOut]);
-
-  console.log(isLogin);
 
   return (
     <>
