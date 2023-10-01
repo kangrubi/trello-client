@@ -26,8 +26,6 @@ const App = () => {
   }, [isLogin]);
 
   useEffect(() => {
-    if (!profile) return;
-
     if (profile !== undefined) {
       signIn();
     } else {
