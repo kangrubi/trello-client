@@ -4,7 +4,7 @@ import { IRegisterRequest, IRegisterResponse } from "../types/auth.type";
 export class AuthService {
   private readonly apiService: ApiService;
 
-  constructor() {
+  constructor(apiService: ApiService) {
     this.apiService = apiService;
   }
 
