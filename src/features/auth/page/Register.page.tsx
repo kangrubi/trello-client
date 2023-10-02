@@ -2,9 +2,13 @@ import React, { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { Form } from "antd";
 
+type TRegisterForm = {};
+
 const Register = () => {
   const { register } = useAuth();
   const [form] = Form.useForm();
+
+  const onFinish = async (values: any) => {};
 
   return (
     <div>

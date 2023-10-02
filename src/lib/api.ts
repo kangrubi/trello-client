@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import commonConfig from "../config/common.config";
 
-interface ApiServiceConfig {
+interface IApiServiceConfig {
   baseURL?: string;
   timeout?: number;
   headers?: Record<string, string>;
@@ -12,7 +12,7 @@ export class ApiService {
   private static instance: ApiService;
   private axiosInstance: AxiosInstance;
 
-  private constructor(config?: ApiServiceConfig) {
+  private constructor(config?: IApiServiceConfig) {
     this.axiosInstance = axios.create({
       baseURL: config?.baseURL || "https://api.example.com",
       timeout: config?.timeout || 10000,
@@ -25,7 +25,7 @@ export class ApiService {
     );
   }
 
-  public static getInstance(config?: ApiServiceConfig): ApiService {
+  public static getInstance(config?: IApiServiceConfig): ApiService {
     if (!ApiService.instance) {
       ApiService.instance = new ApiService(config);
     }
