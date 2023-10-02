@@ -8,7 +8,7 @@ interface ApiServiceConfig {
   headers?: Record<string, string>;
 }
 
-class ApiService {
+export class ApiService {
   private static instance: ApiService;
   private axiosInstance: AxiosInstance;
 
