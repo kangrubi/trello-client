@@ -13,11 +13,7 @@ interface IAuthDIContainer {
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-const AuthDIContainer = (
-  { authService }: IAuthDIContainer = {
-    authService: new AuthService(apiService),
-  }
-) => {
+const AuthDIContainer = ({ authService }: IAuthDIContainer) => {
   const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const register = async (request: IRegisterRequest) => {
       return await authService.register(request);
@@ -37,4 +33,8 @@ const AuthDIContainer = (
   return { AuthProvider };
 };
 
-export default AuthDIContainer();
+const AuthProvider = AuthDIContainer({
+  authService: new AuthService(apiService),
+});
+
+export default AuthProvider;
