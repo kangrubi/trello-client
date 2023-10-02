@@ -15,14 +15,10 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthDIContainer = ({ authService }: IAuthDIContainer) => {
   const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const register = async (request: IRegisterRequest) => {
-      return await authService.register(request);
-    };
-
     return (
       <AuthContext.Provider
         value={{
-          register,
+          register: authService.register,
         }}
       >
         {children}
