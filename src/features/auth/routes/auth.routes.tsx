@@ -5,17 +5,19 @@ import Register from "../page/Register.page";
 
 const authRoutes: RouteObject[] = [
   {
-    path: "/auth",
+    path: "auth",
     element: <AuthLayout />,
     children: [
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <Register />,
       },
     ],
   },
 ];
+
+export default authRoutes;
