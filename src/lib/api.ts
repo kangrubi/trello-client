@@ -1,42 +1,107 @@
-import axios from "axios";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import commonConfig from "../config/common.config";
 
-class ApiService implements IApiService {
+interface ApiServiceConfig {
+  baseURL?: string;
+  timeout?: number;
+  headers?: Record<string, string>;
+}
+
+class ApiService {
   private static instance: ApiService;
+  private axiosInstance: AxiosInstance;
 
-  private constructor() {}
+  private constructor(config?: ApiServiceConfig) {
+    this.axiosInstance = axios.create({
+      baseURL: config?.baseURL || "https://api.example.com",
+      timeout: config?.timeout || 10000,
+      headers: config?.headers || { "Content-Type": "application/json" },
+    });
 
-  public static getInstance(): ApiService {
+    this.axiosInstance.interceptors.response.use(
+      this.handleResponse,
+      this.handleError
+    );
+  }
+
+  public static getInstance(config?: ApiServiceConfig): ApiService {
     if (!ApiService.instance) {
-      ApiService.instance = new ApiService();
+      ApiService.instance = new ApiService(config);
     }
 
     return ApiService.instance;
   }
 
-  public async get<T>(url: string): Promise<T> {
-    const response = await axios.get(url);
-    return response.data;
+  private handleResponse(response: AxiosResponse): any {
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    }
+
+    throw new Error(`HTTP error: ${response.status}`);
   }
 
-  public async post<T>(url: string, body: unknown): Promise<T> {
-    const response = await axios.post(url, body);
-    return response.data;
+  private handleError(error: any): Promise<any> {
+    console.error(error);
+    return Promise.reject(error);
   }
 
-  public async put<T>(url: string, body: unknown): Promise<T> {
-    const response = await axios.put(url, body);
-    return response.data;
+  public async request<T>(
+    method: string,
+    url: string,
+    body?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    try {
+      const response = await this.axiosInstance.request({
+        method,
+        url,
+        data: body,
+        ...config,
+      });
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
   }
 
-  public async delete<T>(url: string): Promise<T> {
-    const response = await axios.delete(url);
-    return response.data;
+  public get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>("GET", url, undefined, config);
   }
 
-  public async patch<T>(url: string, body: unknown): Promise<T> {
-    const response = await axios.patch(url, body);
-    return response.data;
+  public post<T>(
+    url: string,
+    body: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>("POST", url, body, config);
+  }
+
+  public put<T>(
+    url: string,
+    body: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>("PUT", url, body, config);
+  }
+
+  public delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>("DELETE", url, undefined, config);
+  }
+
+  public patch<T>(
+    url: string,
+    body: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>("PATCH", url, body, config);
   }
 }
 
-export default ApiService.getInstance();
+const apiService = ApiService.getInstance({
+  baseURL: commonConfig.API_URL,
+  timeout: 5000,
+});
+
+export default apiService;
