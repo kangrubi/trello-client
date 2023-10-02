@@ -1,19 +1,36 @@
 import React, { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { Form } from "antd";
+import { useNavigate } from "react-router-dom";
 
-type TRegisterForm = {};
+type TRegisterForm = {
+  username: string;
+  email: string;
+  password: string;
+};
 
 const Register = () => {
   const { register } = useAuth();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<TRegisterForm>();
+  const navigate = useNavigate();
 
-  const onFinish = async (values: any) => {};
+  const onFinish = async (values: TRegisterForm) => {
+    try {
+      await register(values);
+
+      navigate("/auth/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
       <h1>Register Page</h1>
-      <Form form={form}>
+      <Form form={form} onFinish={onFinish}>
+        <Form.Item name="username">
+          <input type="username" />
+        </Form.Item>
         <Form.Item name="email">
           <input type="email" />
         </Form.Item>
