@@ -1,7 +1,12 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const BoardLayout = () => {
-  return <div>board.layout</div>;
+  return (
+    <div>
+      <Outlet />
+    </div>
+  );
 };
 
 export default BoardLayout;
