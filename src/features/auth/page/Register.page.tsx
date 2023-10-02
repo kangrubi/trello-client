@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
-import { Form } from "antd";
+import { Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 type TRegisterForm = {
@@ -28,14 +28,14 @@ const Register = () => {
     <div>
       <h1>Register Page</h1>
       <Form form={form} onFinish={onFinish}>
-        <Form.Item name="username">
-          <input type="username" />
+        <Form.Item name="username" label="Username">
+          <Input />
         </Form.Item>
-        <Form.Item name="email">
-          <input type="email" />
+        <Form.Item name="email" label="Email">
+          <Input />
         </Form.Item>
-        <Form.Item name="password">
-          <input type="password" />
+        <Form.Item name="password" label="Password">
+          <Input.Password />
         </Form.Item>
         <Form.Item>
           <button type="submit">Register</button>

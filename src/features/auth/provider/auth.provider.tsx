@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 import { AuthService } from "../service/auth.service";
 import apiService from "../../../lib/api";
 import { IRegisterRequest, IRegisterResponse } from "../types/auth.type";
@@ -13,12 +13,20 @@ interface IAuthDIContainer {
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-const AuthDIContainer = ({ authService }: IAuthDIContainer) => {
+const AuthDIContainer = (
+  { authService }: IAuthDIContainer = {
+    authService: new AuthService(apiService),
+  }
+) => {
   const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const register = async (request: IRegisterRequest) => {
+      const response = await authService.register(request);
+      return response;
+    };
     return (
       <AuthContext.Provider
         value={{
-          register: authService.register,
+          register,
         }}
       >
         {children}
@@ -26,11 +34,9 @@ const AuthDIContainer = ({ authService }: IAuthDIContainer) => {
     );
   };
 
-  return { AuthProvider };
+  return AuthProvider;
 };
 
-const AuthProvider = AuthDIContainer({
-  authService: new AuthService(apiService),
-});
+const AuthProvider = AuthDIContainer();
 
 export default AuthProvider;
