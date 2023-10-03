@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import commonConfig from "../config/common.config";
+import localStorageService, {
+  LocalStorageService,
+} from "../../localStorage/localStorage.service";
 
 interface IApiServiceConfig {
   baseURL?: string;
@@ -11,13 +14,33 @@ interface IApiServiceConfig {
 export class ApiService {
   private static instance: ApiService;
   private axiosInstance: AxiosInstance;
+  private localStorageService: LocalStorageService;
 
-  private constructor(config?: IApiServiceConfig) {
+  private constructor(
+    config?: IApiServiceConfig,
+    localStorageService?: LocalStorageService
+  ) {
     this.axiosInstance = axios.create({
       baseURL: config?.baseURL || "https://api.example.com",
       timeout: config?.timeout || 10000,
       headers: config?.headers || { "Content-Type": "application/json" },
     });
+
+    this.localStorageService =
+      localStorageService || LocalStorageService.getInstance();
+
+    axios.interceptors.request.use(
+      (config) => {
+        const token = this.localStorageService.getItem("accessToken");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
 
     this.axiosInstance.interceptors.response.use(
       this.handleResponse,
@@ -25,9 +48,12 @@ export class ApiService {
     );
   }
 
-  public static getInstance(config?: IApiServiceConfig): ApiService {
+  public static getInstance(
+    config?: IApiServiceConfig,
+    localStorageService?: LocalStorageService
+  ): ApiService {
     if (!ApiService.instance) {
-      ApiService.instance = new ApiService(config);
+      ApiService.instance = new ApiService(config, localStorageService);
     }
 
     return ApiService.instance;
@@ -99,9 +125,12 @@ export class ApiService {
   }
 }
 
-const apiService = ApiService.getInstance({
-  baseURL: commonConfig.API_URL,
-  timeout: 5000,
-});
+const apiService = ApiService.getInstance(
+  {
+    baseURL: commonConfig.API_URL,
+    timeout: 5000,
+  },
+  localStorageService
+);
 
 export default apiService;
