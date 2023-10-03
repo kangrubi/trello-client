@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import BoardLayout from "../layout/Board.layout";
 import BoardList from "../page/BoardList.page";
+import BoardTemp from "../page/BoardTemp.page";
 
 const boardRoutes: RouteObject[] = [
   {
@@ -10,6 +11,10 @@ const boardRoutes: RouteObject[] = [
       {
         path: "list",
         element: <BoardList />,
+      },
+      {
+        path: "temp",
+        element: <BoardTemp />,
       },
     ],
   },
