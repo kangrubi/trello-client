@@ -1,9 +1,12 @@
 import { Outlet } from "react-router-dom";
+import AuthProvider from "../provider/auth.provider";
 
 const RootLayout = () => {
   return (
     <div className="root-layout">
-      <Outlet />
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
     </div>
   );
 };
