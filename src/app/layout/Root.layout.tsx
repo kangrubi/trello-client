@@ -26,10 +26,16 @@ const RootLayout = () => {
     if (!isLogin) {
       navigate("/auth/login");
       setPrevLocation(location.pathname);
-    } else {
-      if (location.pathname === "/auth/login") {
-        navigate(prevLocation);
+      return;
+    }
+
+    if (location.pathname === "/auth/login") {
+      if (prevLocation === "/") {
+        navigate("/board/list");
+        return;
       }
+
+      navigate(prevLocation);
     }
   }, [isLogin]);
 

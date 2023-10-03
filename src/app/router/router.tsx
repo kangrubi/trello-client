@@ -17,6 +17,10 @@ const router = createBrowserRouter([
     ),
     children: [...authRoutes, ...boardRoutes],
   },
+  {
+    path: "*",
+    element: <div>404 Not Found</div>,
+  },
 ]);
 
 export default router;
