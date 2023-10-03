@@ -52,5 +52,7 @@ export class AuthService {
         withCredentials: true,
       }
     );
+
+    this.localStorageService.removeItem("accessToken");
   }
 }
