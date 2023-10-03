@@ -13,6 +13,8 @@ interface IAuthContext {
   register: (request: IRegisterRequest) => Promise<IRegisterResponse>;
   login: (request: ILoginRequest) => Promise<ILoginResponse>;
   isLogin: boolean;
+  authorize: () => void;
+  unauthorize: () => void;
 }
 
 interface IAuthDIContainer {
@@ -49,12 +51,22 @@ const AuthDIContainer = (
       }
     };
 
+    const authorize = () => {
+      setIsLogin(true);
+    };
+
+    const unauthorize = () => {
+      setIsLogin(false);
+    };
+
     return (
       <AuthContext.Provider
         value={{
           register,
           login,
           isLogin,
+          authorize,
+          unauthorize,
         }}
       >
         {children}

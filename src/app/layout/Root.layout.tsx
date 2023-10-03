@@ -4,15 +4,29 @@ import useAuth from "../../auth/hooks/useAuth.hook";
 import useUser from "../../user/hooks/useUser.hook";
 
 const RootLayout = () => {
-  const { isLogin } = useAuth();
+  const { isLogin, authorize, unauthorize } = useAuth();
   const { user, getUserProfile } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
+    (async () => {
+      try {
+        await getUserProfile();
+        authorize();
+      } catch (error) {
+        navigate("/auth/login");
+        unauthorize();
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     if (!isLogin) {
       navigate("/auth/login");
+    } else {
+      navigate("/board/list");
     }
-  }, [isLogin, navigate]);
+  }, [isLogin]);
 
   return (
     <div className="root-layout">

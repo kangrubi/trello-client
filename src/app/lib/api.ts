@@ -29,7 +29,7 @@ export class ApiService {
     this.localStorageService =
       localStorageService || LocalStorageService.getInstance();
 
-    axios.interceptors.request.use(
+    this.axiosInstance.interceptors.request.use(
       (config) => {
         const token = this.localStorageService.getItem("accessToken");
         if (token) {
