@@ -1,5 +1,5 @@
 import { useForm } from "antd/es/form/Form";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth.hook";
 import { Form } from "antd";
 import { useNavigate } from "react-router-dom";
 

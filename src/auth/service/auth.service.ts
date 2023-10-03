@@ -1,4 +1,5 @@
 import { ApiService } from "../../app/lib/api";
+import { LocalStorageService } from "../../localStorage/localStorage.service";
 import {
   ILoginRequest,
   ILoginResponse,
@@ -8,9 +9,14 @@ import {
 
 export class AuthService {
   private apiService: ApiService;
+  private localStorageService: LocalStorageService;
 
-  constructor(apiService: ApiService) {
+  constructor(
+    apiService: ApiService,
+    localStorageService: LocalStorageService
+  ) {
     this.apiService = apiService;
+    this.localStorageService = localStorageService;
   }
 
   async register(
@@ -27,10 +33,13 @@ export class AuthService {
     const response = await this.apiService.post<ILoginResponse>("/auth/login", {
       ...loginRequest,
     });
+
+    this.localStorageService.setItem("accessToken", response.accessToken);
     return response;
   }
 
   async logout(): Promise<void> {
     await this.apiService.post<void>("/auth/logout", {});
+    this.localStorageService.removeItem("accessToken");
   }
 }

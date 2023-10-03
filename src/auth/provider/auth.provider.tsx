@@ -7,6 +7,7 @@ import {
   IRegisterResponse,
 } from "../types/auth.type";
 import apiService from "../../app/lib/api";
+import localStorageService from "../../localStorage/localStorage.service";
 
 interface IAuthContext {
   register: (request: IRegisterRequest) => Promise<IRegisterResponse>;
@@ -22,7 +23,7 @@ export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 const AuthDIContainer = (
   { authService }: IAuthDIContainer = {
-    authService: new AuthService(apiService),
+    authService: new AuthService(apiService, localStorageService),
   }
 ) => {
   const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -36,8 +37,6 @@ const AuthDIContainer = (
     const login = async (request: ILoginRequest) => {
       try {
         const response = await authService.login(request);
-
-        localStorage.setItem("token", response.accessToken);
 
         setIsLogin(true);
 

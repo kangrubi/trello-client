@@ -51,6 +51,6 @@ const UserDIContainer = (
   return UserProvider;
 };
 
-const AuthProvider = UserDIContainer();
+const UserProvider = UserDIContainer();
 
-export default AuthProvider;
+export default UserProvider;
