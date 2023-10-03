@@ -48,8 +48,13 @@ const AuthProvider = ({
   };
 
   const logout = async () => {
-    await authService.logout();
-    setIsLogin(false);
+    try {
+      await authService.logout();
+      setIsLogin(false);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
   const authorize = () => {

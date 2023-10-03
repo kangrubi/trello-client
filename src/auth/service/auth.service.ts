@@ -44,15 +44,5 @@ export class AuthService {
     return response;
   }
 
-  async logout(): Promise<void> {
-    await this.apiService.post<void>(
-      "/auth/logout",
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-
-    this.localStorageService.removeItem("accessToken");
-  }
+  async logout(): Promise<void> {}
 }
