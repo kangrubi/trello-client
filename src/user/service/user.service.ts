@@ -8,7 +8,7 @@ export class UserService {
     this.apiService = apiService;
   }
 
-  async getProfile(): Promise<IGetUserProfileResponse> {
+  async getUserProfile(): Promise<IGetUserProfileResponse> {
     const response = await this.apiService.get<IGetUserProfileResponse>(
       "/user/profile"
     );
