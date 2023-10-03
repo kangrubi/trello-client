@@ -5,7 +5,9 @@ const BoardLayout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/board/list");
+    if (window.location.pathname === "/board") {
+      navigate("/board/list");
+    }
   }, []);
 
   return (

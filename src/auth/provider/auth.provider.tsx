@@ -15,6 +15,7 @@ interface IAuthContext {
   isLogin: boolean;
   authorize: () => void;
   unauthorize: () => void;
+  logout: () => Promise<void>;
 }
 
 interface IAuthDIContainer {
@@ -51,6 +52,11 @@ const AuthDIContainer = (
       }
     };
 
+    const logout = async () => {
+      await authService.logout();
+      setIsLogin(false);
+    };
+
     const authorize = () => {
       setIsLogin(true);
     };
@@ -67,6 +73,7 @@ const AuthDIContainer = (
           isLogin,
           authorize,
           unauthorize,
+          logout,
         }}
       >
         {children}

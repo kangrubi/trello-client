@@ -30,16 +30,27 @@ export class AuthService {
   }
 
   async login(loginRequest: ILoginRequest): Promise<ILoginResponse> {
-    const response = await this.apiService.post<ILoginResponse>("/auth/login", {
-      ...loginRequest,
-    });
+    const response = await this.apiService.post<ILoginResponse>(
+      "/auth/login",
+      {
+        ...loginRequest,
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
     this.localStorageService.setItem("accessToken", response.accessToken);
     return response;
   }
 
   async logout(): Promise<void> {
-    await this.apiService.post<void>("/auth/logout", {});
-    this.localStorageService.removeItem("accessToken");
+    await this.apiService.post<void>(
+      "/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   }
 }

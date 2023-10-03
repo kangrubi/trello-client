@@ -4,11 +4,11 @@ import useAuth from "../../auth/hooks/useAuth.hook";
 import useUser from "../../user/hooks/useUser.hook";
 
 const RootLayout = () => {
-  const { isLogin, authorize, unauthorize } = useAuth();
+  const { isLogin, authorize, unauthorize, logout } = useAuth();
   const { getUserProfile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
-  const [prevLocation, setPrevLocation] = useState(location.pathname);
+  const [prevLocation] = useState(location.pathname);
 
   useEffect(() => {
     (async () => {
@@ -22,15 +22,16 @@ const RootLayout = () => {
     })();
   }, []);
 
+  const handleClickLogout = async () => {
+    await logout();
+    navigate("/auth/login");
+  };
+
   useEffect(() => {
     if (!isLogin) {
       navigate("/auth/login");
-      setPrevLocation(location.pathname);
-      return;
-    }
-
-    if (location.pathname === "/auth/login") {
-      if (prevLocation === "/") {
+    } else {
+      if (prevLocation.includes("/auth") || prevLocation === "/") {
         navigate("/board/list");
         return;
       }
@@ -41,6 +42,9 @@ const RootLayout = () => {
 
   return (
     <div className="root-layout">
+      <div>
+        <button onClick={handleClickLogout}>logout</button>
+      </div>
       <Outlet />
     </div>
   );
