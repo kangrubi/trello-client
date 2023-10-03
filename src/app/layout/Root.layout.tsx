@@ -5,7 +5,7 @@ import useUser from "../../user/hooks/useUser.hook";
 
 const RootLayout = () => {
   const { isLogin, authorize, unauthorize } = useAuth();
-  const { user, getUserProfile } = useUser();
+  const { getUserProfile } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
