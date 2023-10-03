@@ -33,7 +33,7 @@ const AuthDIContainer = (
       return response;
     };
 
-    const login = async (request: IRegisterRequest) => {
+    const login = async (request: ILoginRequest) => {
       try {
         const response = await authService.login(request);
 
@@ -44,6 +44,9 @@ const AuthDIContainer = (
         return response;
       } catch (error) {
         console.log(error);
+        setIsLogin(false);
+
+        throw error;
       }
     };
 

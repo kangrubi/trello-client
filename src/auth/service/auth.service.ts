@@ -1,4 +1,4 @@
-import { ApiService } from "../../common/lib/api";
+import { ApiService } from "../../app/lib/api";
 import {
   ILoginRequest,
   ILoginResponse,
