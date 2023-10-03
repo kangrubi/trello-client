@@ -1,7 +1,17 @@
-import { Outlet } from "react-router-dom";
-import AuthProvider from "../provider/auth.provider";
+import { Outlet, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
 
 const AuthLayout = () => {
+  const { isLogin } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate("/board/list");
+    }
+  }, [isLogin, navigate]);
+
   return (
     <div>
       <Outlet />
