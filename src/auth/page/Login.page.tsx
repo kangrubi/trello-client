@@ -11,26 +11,22 @@ type TLoginForm = {
 
 const Login = () => {
   const [form] = useForm();
-  const { login, isLogin } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleOnFinish = async (values: TLoginForm) => {
     try {
       await login(values);
+
+      navigate("/board/list");
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    if (isLogin) {
-      navigate("/board/list");
-    }
-  }, [isLogin, navigate]);
-
   return (
     <div>
-      <Form form={form} onFinish={login}>
+      <Form form={form} onFinish={handleOnFinish}>
         <Form.Item name="email" label="Email">
           <input />
         </Form.Item>

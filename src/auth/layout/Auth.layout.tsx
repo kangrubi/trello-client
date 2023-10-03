@@ -3,15 +3,6 @@ import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
 
 const AuthLayout = () => {
-  const { isLogin } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isLogin) {
-      navigate("/board/list");
-    }
-  }, [isLogin, navigate]);
-
   return (
     <div>
       <Outlet />
