@@ -16,6 +16,7 @@ const RootLayout = () => {
         await getUserProfile();
         authorize();
       } catch (error) {
+        if (location.pathname.includes("/auth")) return;
         navigate("/auth/login");
         unauthorize();
       }
@@ -29,15 +30,17 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (!isLogin) {
+      if (location.pathname.includes("/auth")) return;
       navigate("/auth/login");
-    } else {
-      if (prevLocation.includes("/auth") || prevLocation === "/") {
-        navigate("/board/list");
-        return;
-      }
-
-      navigate(prevLocation);
+      return;
     }
+
+    if (prevLocation.includes("/auth") || prevLocation === "/") {
+      navigate("/board/list");
+      return;
+    }
+
+    navigate(prevLocation);
   }, [isLogin]);
 
   return (
