@@ -8,49 +8,41 @@ interface IUserContext {
   getUserProfile: () => Promise<IGetUserProfileResponse>;
 }
 
-interface IUserDIContainer {
-  userService: UserService;
-}
-
 export const UserContext = createContext<IUserContext>({} as IUserContext);
 
-const UserDIContainer = (
-  { userService }: IUserDIContainer = {
-    userService: new UserService(apiService),
-  }
-) => {
-  const UserProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<IGetUserProfileResponse>();
+const UserProvider = ({
+  userService,
+  children,
+}: {
+  userService: UserService;
+  children: React.ReactNode;
+}) => {
+  const [user, setUser] = useState<IGetUserProfileResponse>();
 
-    const getUserProfile = async () => {
-      try {
-        const response = await userService.getUserProfile();
+  const getUserProfile = async () => {
+    try {
+      const response = await userService.getUserProfile();
 
-        setUser(response);
+      setUser(response);
 
-        return response;
-      } catch (error) {
-        console.log(error);
+      return response;
+    } catch (error) {
+      console.log(error);
 
-        throw error;
-      }
-    };
-
-    return (
-      <UserContext.Provider
-        value={{
-          user,
-          getUserProfile,
-        }}
-      >
-        {children}
-      </UserContext.Provider>
-    );
+      throw error;
+    }
   };
 
-  return UserProvider;
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        getUserProfile,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };
-
-const UserProvider = UserDIContainer();
 
 export default UserProvider;

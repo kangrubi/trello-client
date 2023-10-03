@@ -6,8 +6,6 @@ import {
   IRegisterRequest,
   IRegisterResponse,
 } from "../types/auth.type";
-import apiService from "../../app/lib/api";
-import localStorageService from "../../localStorage/localStorage.service";
 
 interface IAuthContext {
   register: (request: IRegisterRequest) => Promise<IRegisterResponse>;
@@ -18,72 +16,64 @@ interface IAuthContext {
   logout: () => Promise<void>;
 }
 
-interface IAuthDIContainer {
-  authService: AuthService;
-}
-
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-const AuthDIContainer = (
-  { authService }: IAuthDIContainer = {
-    authService: new AuthService(apiService, localStorageService),
-  }
-) => {
-  const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isLogin, setIsLogin] = useState<boolean>(false);
+const AuthProvider = ({
+  authService,
+  children,
+}: {
+  authService: AuthService;
+  children: React.ReactNode;
+}) => {
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
-    const register = async (request: IRegisterRequest) => {
-      const response = await authService.register(request);
-      return response;
-    };
-
-    const login = async (request: ILoginRequest) => {
-      try {
-        const response = await authService.login(request);
-
-        setIsLogin(true);
-
-        return response;
-      } catch (error) {
-        console.log(error);
-        setIsLogin(false);
-
-        throw error;
-      }
-    };
-
-    const logout = async () => {
-      await authService.logout();
-      setIsLogin(false);
-    };
-
-    const authorize = () => {
-      setIsLogin(true);
-    };
-
-    const unauthorize = () => {
-      setIsLogin(false);
-    };
-
-    return (
-      <AuthContext.Provider
-        value={{
-          register,
-          login,
-          isLogin,
-          authorize,
-          unauthorize,
-          logout,
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
-    );
+  const register = async (request: IRegisterRequest) => {
+    const response = await authService.register(request);
+    return response;
   };
 
-  return AuthProvider;
-};
+  const login = async (request: ILoginRequest) => {
+    try {
+      const response = await authService.login(request);
 
-const AuthProvider = AuthDIContainer();
+      setIsLogin(true);
+
+      return response;
+    } catch (error) {
+      console.log(error);
+      setIsLogin(false);
+
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    await authService.logout();
+    setIsLogin(false);
+  };
+
+  const authorize = () => {
+    setIsLogin(true);
+  };
+
+  const unauthorize = () => {
+    setIsLogin(false);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        register,
+        login,
+        isLogin,
+        authorize,
+        unauthorize,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthProvider;
