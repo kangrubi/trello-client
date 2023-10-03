@@ -1,10 +1,10 @@
-import { ApiService } from "../lib/api";
+import { ApiService } from "../../common/lib/api";
 import {
   ILoginRequest,
   ILoginResponse,
   IRegisterRequest,
   IRegisterResponse,
-} from "../features/auth/types/auth.type";
+} from "../types/auth.type";
 
 export class AuthService {
   private apiService: ApiService;

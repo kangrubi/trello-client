@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import AuthProvider from "../provider/auth.provider";
+import AuthProvider from "../../auth/provider/auth.provider";
 
 const RootLayout = () => {
   return (
