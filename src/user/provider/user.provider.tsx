@@ -1,14 +1,13 @@
 import { createContext, useState } from "react";
 import { IGetUserProfileResponse } from "../types/user.type";
 import { UserService } from "../service/user.service";
-import apiService from "../../app/lib/api";
 
 interface IUserContext {
   user: IGetUserProfileResponse | undefined;
   getUserProfile: () => Promise<IGetUserProfileResponse>;
 }
 
-export const UserContext = createContext<IUserContext>({} as IUserContext);
+export const UserContext = createContext<IUserContext | undefined>(undefined);
 
 const UserProvider = ({
   userService,

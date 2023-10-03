@@ -16,7 +16,7 @@ interface IAuthContext {
   logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
+export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 const AuthProvider = ({
   authService,
