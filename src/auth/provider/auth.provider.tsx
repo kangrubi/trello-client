@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { AuthService } from "../service/auth.service";
-import apiService from "../../common/lib/api";
 import { IRegisterRequest, IRegisterResponse } from "../types/auth.type";
+import apiService from "../../app/lib/api";
 
 interface IAuthContext {
   register: (request: IRegisterRequest) => Promise<IRegisterResponse>;
