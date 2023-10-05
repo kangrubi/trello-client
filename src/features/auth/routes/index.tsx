@@ -1,5 +1,5 @@
 import { RouteObject } from "react-router-dom";
-import { AuthLayout, ForgotPassword, Login, Register } from "..";
+import { AuthLayout, ForgotPassword, Login, Register, ResetPassword } from "..";
 
 export const authRoutes: RouteObject[] = [
   {
@@ -14,6 +14,10 @@ export const authRoutes: RouteObject[] = [
       {
         path: "forgot-password",
         element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:token",
+        element: <ResetPassword />,
       },
     ],
   },
