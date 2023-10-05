@@ -29,3 +29,8 @@ export interface LoginRequest {
 export interface RefreshResponse {
   accessToken: string;
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  password: string;
+}
