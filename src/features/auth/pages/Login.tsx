@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginRequest } from "../types";
 import useAuth from "../hooks/useAuth";
 import { storage } from "../../../utils/storage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { error, isLogin, fetchLogin } = useAuth();
@@ -69,6 +69,7 @@ const Login = () => {
         <p>{errors.password?.message}</p>
       </div>
       <button type="submit">로그인</button>
+      <Link to="/auth/forgot-password">비밀번호 찾기</Link>
     </form>
   );
 };
