@@ -2,9 +2,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "./features/auth/hooks/useAuth";
 import { useUser } from "./features/user/hooks/useUser";
 import { useEffect, useState } from "react";
+import { storage } from "./utils/storage";
 
 function App() {
-  const { isLogin, signIn, signOut } = useAuth();
+  const { isLogin, signIn, signOut, fetchLogout } = useAuth();
   const { profile, fetchProfile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,8 +45,17 @@ function App() {
     }
   }, [profile]);
 
+  const handleClickLogout = async () => {
+    await fetchLogout();
+    signOut();
+    storage.clearToken();
+  };
+
   return (
     <>
+      <button type="button" onClick={handleClickLogout}>
+        로그아웃
+      </button>
       <Outlet />
     </>
   );
