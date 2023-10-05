@@ -6,14 +6,21 @@ import { storage } from "./utils/storage";
 
 function App() {
   const { isLogin, signIn, signOut, fetchLogout } = useAuth();
-  const { profile, fetchProfile } = useUser();
+  const { fetchProfile } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const [prevLocation] = useState(location.pathname);
 
   useEffect(() => {
     (async () => {
-      await fetchProfile();
+      try {
+        await fetchProfile();
+        signIn();
+      } catch (error) {
+        if (location.pathname.includes("/auth")) return;
+        navigate("/auth/login");
+        signOut();
+      }
     })();
   }, []);
 
@@ -34,16 +41,6 @@ function App() {
     }
     navigate(prevLocation);
   }, [isLogin]);
-
-  useEffect(() => {
-    if (profile !== undefined) {
-      signIn();
-    } else {
-      if (location.pathname.includes("/auth")) return;
-      navigate("/auth/login");
-      signOut();
-    }
-  }, [profile]);
 
   const handleClickLogout = async () => {
     await fetchLogout();
