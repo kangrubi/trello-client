@@ -22,8 +22,10 @@ const ResetPassword = () => {
   ) => {
     if (!token) return;
 
+    const decoded = atob(token);
+
     const response = await fetchResetPassword({
-      token: token,
+      token: decoded,
       password: data.password,
     });
 
