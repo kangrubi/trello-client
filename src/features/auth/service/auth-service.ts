@@ -10,15 +10,16 @@ export interface IAuthService {
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
 
-  login = async (email: string, password: string) => {
+  async login(email: string, password: string): Promise<void> {
     this.httpService.post("/login", { email, password });
-  };
-
-  logout = async () => {
+  }
+  async logout(): Promise<void> {
     console.log("logout");
-  };
-
-  register = async (params: RegisterParams) => {
-    this.httpService.post<RegisterResponse>("/api/v1/auth/register", params);
-  };
+  }
+  async register(params: RegisterParams): Promise<void> {
+    await this.httpService.post<RegisterResponse>(
+      "/api/v1/auth/register",
+      params
+    );
+  }
 }
