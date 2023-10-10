@@ -1,3 +1,4 @@
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
-export { Register };
+export { Register, Login };
