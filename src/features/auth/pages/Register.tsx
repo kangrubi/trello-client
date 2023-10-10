@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterParams } from "../types";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { register: callRegisterAPI, error } = useAuth();
@@ -10,11 +11,16 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterParams>();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<RegisterParams> = async (
     data: RegisterParams
   ) => {
-    await callRegisterAPI(data);
+    const response = await callRegisterAPI(data);
+
+    if (response?.statusCode === 201) {
+      navigate("/auth/login");
+    }
   };
 
   useEffect(() => {
