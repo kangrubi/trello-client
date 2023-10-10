@@ -1,10 +1,12 @@
 import { IHttpService } from "@/lib/http";
-import { RegisterParams, RegisterResponse } from "../types";
+import { PublicApiResponse, RegisterParams, RegisterResponse } from "../types";
 
 export interface IAuthService {
   login(email: string, password: string): Promise<void>;
   logout(): Promise<void>;
-  register(params: RegisterParams): Promise<void>;
+  register(
+    params: RegisterParams
+  ): Promise<PublicApiResponse<RegisterResponse>>;
 }
 
 export class AuthService implements IAuthService {
@@ -16,10 +18,13 @@ export class AuthService implements IAuthService {
   async logout(): Promise<void> {
     console.log("logout");
   }
-  async register(params: RegisterParams): Promise<void> {
-    await this.httpService.post<RegisterResponse>(
-      "/api/v1/auth/register",
-      params
-    );
+  async register(
+    params: RegisterParams
+  ): Promise<PublicApiResponse<RegisterResponse>> {
+    const response = await this.httpService.post<
+      PublicApiResponse<RegisterResponse>
+    >("/api/v1/auth/register", params);
+
+    return response;
   }
 }
