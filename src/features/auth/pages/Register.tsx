@@ -3,25 +3,40 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { RegisterParams } from "../types";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { Form, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const registerSchema = z.object({
-  username: z.string(),
-  email: z.string(),
-  password: z.string(),
+  username: z
+    .string()
+    .min(3, { message: "최소 3글자 이상 입력해주세요" })
+    .regex(
+      /^[a-zA-Z0-9]*$/,
+      "영어 대소문자 또는 대소문자와 숫자를 입력해주세요"
+    ),
+  email: z.string().email({ message: "이메일 형식을 입력해주세요" }),
+  password: z
+    .string()
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,128}$/,
+      "패스워드 대소문자, 숫자, 특수문자 중 5가지 이상 조합하여 8~128자리 이내를 입력하세요"
+    ),
 });
 
 const Register = () => {
-  const { register: callRegisterAPI, error } = useAuth();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterParams>({
-    resolver: zodResolver(registerSchema),
-  });
+  const { register, error } = useAuth();
+
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -32,12 +47,10 @@ const Register = () => {
     },
   });
 
-  const navigate = useNavigate();
-
   const onSubmit: SubmitHandler<RegisterParams> = async (
     data: z.infer<typeof registerSchema>
   ) => {
-    const response = await callRegisterAPI(data);
+    const response = await register(data);
 
     if (response?.statusCode === 201) {
       navigate("/auth/login");
@@ -51,62 +64,66 @@ const Register = () => {
   }, [error]);
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        <FormItem>
-          <FormLabel htmlFor="username">username</FormLabel>
-          <input
-            type="text"
-            id="username"
-            placeholder="username"
-            {...register("username", {
-              required: true,
-              pattern: {
-                value: /^[a-zA-Z0-9]*$/,
-                message: "영어 대소문자와 숫자를 입력해주세요",
-              },
-            })}
-          />
-          {errors.username?.message}
-        </FormItem>
-        <FormItem>
-          <FormLabel htmlFor="email">email</FormLabel>
-          <input
-            type="text"
-            id="email"
-            placeholder="email"
-            {...register("email", {
-              required: true,
-              pattern: {
-                value:
-                  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-                message: "이메일 형식이 맞지않습니다.",
-              },
-            })}
-          />
-          {errors.email?.message}
-        </FormItem>
-        <FormItem>
-          <label htmlFor="password">password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="password"
-            {...register("password", {
-              required: true,
-              pattern: {
-                value:
-                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,128}$/,
-                message:
-                  "패스워드 대소문자, 숫자, 특수문자 중 5가지 이상 조합하여 8~128자리 이내를 입력하세요",
-              },
-            })}
-          />
-          {errors.password?.message}
-        </FormItem>
-        <button type="submit">회원가입</button>
-      </form>
-    </Form>
+    <div className="flex items-center justify-center h-screen">
+      <div className="w-80">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="username">Username</FormLabel>
+                  <FormControl>
+                    <Input id="username" placeholder="username" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      id="email"
+                      placeholder="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      id="password"
+                      placeholder="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-center justify-center">
+              <Button type="submit">회원가입</Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 };
 
