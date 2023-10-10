@@ -20,3 +20,9 @@ export interface CustomError {
   timestamp: string;
   path: string;
 }
+
+export interface PublicApiResponse<T> {
+  statusCode: number;
+  timestamp: string;
+  data: T;
+}
