@@ -1,12 +1,19 @@
 import { createContext, useState } from "react";
 import { IAuthService } from "../service/auth-service";
-import { CustomError, RegisterParams } from "../types";
+import {
+  CustomError,
+  PublicApiResponse,
+  RegisterParams,
+  RegisterResponse,
+} from "../types";
 import { AxiosError } from "axios";
 
 interface AuthContextProps {
   login(email: string, password: string): Promise<void>;
   logout(): Promise<void>;
-  register(params: RegisterParams): Promise<void>;
+  register(
+    params: RegisterParams
+  ): Promise<PublicApiResponse<RegisterResponse> | undefined>;
   error: CustomError | undefined;
 }
 
@@ -25,12 +32,15 @@ export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
   const login = async () => {
     authService.login("hello", "world");
   };
+
   const logout = async () => {
     authService.logout();
   };
+
   const register = async (request: RegisterParams) => {
     try {
       const response = await authService.register(request);
+
       return response;
     } catch (error: unknown) {
       const _error = error as AxiosError<CustomError>;
@@ -38,6 +48,7 @@ export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
       setError(_error.response.data);
     }
   };
+
   return (
     <AuthContext.Provider
       value={{
