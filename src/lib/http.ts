@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_URL } from "@/config";
-import axios from "axios";
+import storage from "@/storage";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 export interface IHttpService {
   request<T>(config: any): Promise<T>;
@@ -19,10 +20,16 @@ class HttpService implements IHttpService {
 
   private constructor() {
     this.setRequestInterceptor(
-      (config) => {
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+        const token = storage.getItem();
+
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+
         return config;
       },
-      (error) => {
+      (error: AxiosError | Error): Promise<AxiosError> => {
         return Promise.reject(error);
       }
     );
