@@ -105,8 +105,12 @@ const Register = () => {
               />
               <div className="flex items-center justify-center">
                 <AlertDialog>
-                  <AlertDialogTrigger className="w-full">
-                    <Button type="submit" className="w-full">
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      type="submit"
+                      variant="outline"
+                      className="w-full bg-black text-white"
+                    >
                       Sign Up
                     </Button>
                   </AlertDialogTrigger>
