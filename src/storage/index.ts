@@ -1,6 +1,6 @@
 const storagePrefix = "ruby_";
 
-export const storage = {
+const storage = {
   setItem: (token: string) => {
     window.localStorage.setItem(`${storagePrefix}token`, JSON.stringify(token));
   },
@@ -15,3 +15,5 @@ export const storage = {
     window.localStorage.removeItem(`${storagePrefix}token`);
   },
 };
+
+export default storage;
