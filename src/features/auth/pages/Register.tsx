@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -99,7 +99,12 @@ const Register = () => {
               )}
             />
             <div className="flex items-center justify-center">
-              <Button type="submit">Sign Up</Button>
+              <Button type="submit" className="w-full">
+                Sign Up
+              </Button>
+            </div>
+            <div className="text-center">
+              <Link to="/auth/login">이미 계정이 있습니까? 로그인</Link>
             </div>
           </form>
         </Form>
