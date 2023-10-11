@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { RegisterParams } from "../types";
+import { useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import {
