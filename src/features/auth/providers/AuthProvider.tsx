@@ -2,19 +2,27 @@ import { createContext, useState } from "react";
 import { IAuthService } from "../service/auth-service";
 import {
   CustomError,
+  LoginParams,
+  LoginResponse,
   PublicApiResponse,
   RegisterParams,
   RegisterResponse,
 } from "../types";
 import { AxiosError } from "axios";
+import useAuthStore from "@/stores/auth-store";
 
 interface AuthContextProps {
-  login(email: string, password: string): Promise<void>;
+  login(
+    request: LoginParams
+  ): Promise<PublicApiResponse<LoginResponse> | undefined>;
   logout(): Promise<void>;
   register(
-    params: RegisterParams
+    request: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse> | undefined>;
   error: CustomError | undefined;
+  isLogin: boolean;
+  signIn: () => void;
+  signOut: () => void;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -28,9 +36,20 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
   const [error, setError] = useState<CustomError>();
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const signIn = useAuthStore((state) => state.signIn);
+  const signOut = useAuthStore((state) => state.signOut);
 
-  const login = async () => {
-    authService.login("hello", "world");
+  const login = async (request: LoginParams) => {
+    try {
+      const response = await authService.login(request);
+
+      return response;
+    } catch (error: unknown) {
+      const _error = error as AxiosError<CustomError>;
+      if (!_error.response) return;
+      setError(_error.response.data);
+    }
   };
 
   const logout = async () => {
@@ -56,6 +75,9 @@ export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
         login,
         logout,
         register,
+        isLogin,
+        signIn,
+        signOut,
       }}
     >
       {children}
