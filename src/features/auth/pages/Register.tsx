@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import registerSchema from "../schema/register-schema";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -123,7 +122,6 @@ const Register = () => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   )}
