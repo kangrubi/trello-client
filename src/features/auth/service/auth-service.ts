@@ -1,8 +1,14 @@
 import { IHttpService } from "@/lib/http";
-import { PublicApiResponse, RegisterParams, RegisterResponse } from "../types";
+import {
+  LoginParams,
+  LoginResponse,
+  PublicApiResponse,
+  RegisterParams,
+  RegisterResponse,
+} from "../types";
 
 export interface IAuthService {
-  login(email: string, password: string): Promise<void>;
+  login(params: LoginParams): Promise<PublicApiResponse<LoginResponse>>;
   logout(): Promise<void>;
   register(
     params: RegisterParams
@@ -12,12 +18,18 @@ export interface IAuthService {
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
 
-  async login(email: string, password: string): Promise<void> {
-    this.httpService.post("/login", { email, password });
+  async login(params: LoginParams): Promise<PublicApiResponse<LoginResponse>> {
+    const response = await this.httpService.post<
+      PublicApiResponse<LoginResponse>
+    >("/api/v1/auth/login", params);
+
+    return response;
   }
+
   async logout(): Promise<void> {
     console.log("logout");
   }
+
   async register(
     params: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse>> {
