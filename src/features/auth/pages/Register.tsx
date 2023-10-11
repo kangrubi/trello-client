@@ -46,7 +46,7 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="w-80">
+      <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -99,7 +99,7 @@ const Register = () => {
               )}
             />
             <div className="flex items-center justify-center">
-              <Button type="submit">회원가입</Button>
+              <Button type="submit">Sign Up</Button>
             </div>
           </form>
         </Form>
