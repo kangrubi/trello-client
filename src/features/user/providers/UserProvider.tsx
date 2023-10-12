@@ -35,6 +35,7 @@ export const UserProvider = ({ children, userService }: UserProviderProps) => {
       const _error = error as AxiosError<CustomError>;
       if (!_error.response) return;
       setError(_error.response.data);
+      throw error;
     }
   };
 
