@@ -8,12 +8,12 @@ type TProfile = {
 
 interface UserStore {
   userProfile: TProfile | undefined;
-  setProfile: (userProfile: TProfile) => void;
+  setUserProfile: (userProfile: TProfile) => void;
 }
 
 const useUserStore = create<UserStore>((set) => ({
   userProfile: undefined,
-  setProfile: (userProfile) => set(() => ({ userProfile: userProfile })),
+  setUserProfile: (userProfile) => set(() => ({ userProfile: userProfile })),
 }));
 
 export default useUserStore;
