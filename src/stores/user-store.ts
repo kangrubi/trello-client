@@ -7,13 +7,13 @@ type TProfile = {
 };
 
 interface UserStore {
-  profile: TProfile | undefined;
-  setProfile: (profile: TProfile) => void;
+  userProfile: TProfile | undefined;
+  setProfile: (userProfile: TProfile) => void;
 }
 
 const useUserStore = create<UserStore>((set) => ({
-  profile: undefined,
-  setProfile: (profile) => set(() => ({ profile: profile })),
+  userProfile: undefined,
+  setProfile: (userProfile) => set(() => ({ userProfile: userProfile })),
 }));
 
 export default useUserStore;
