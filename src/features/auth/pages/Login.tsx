@@ -25,10 +25,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import storage from "@/storage";
+import { useUser } from "@/features/user/hooks/useUser";
 
 const Login = () => {
   const { login, error, isLogin, signIn } = useAuth();
+  const { profile } = useUser();
 
   const navigate = useNavigate();
 
@@ -45,8 +46,7 @@ const Login = () => {
 
     if (response?.statusCode === 200) {
       signIn();
-
-      storage.setItem(response.data.accessToken);
+      await profile();
     }
   };
 
