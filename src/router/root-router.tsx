@@ -12,7 +12,10 @@ const rootRouter = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AuthProvider authService={new AuthService(httpService)}>
+      <AuthProvider
+        authService={new AuthService(httpService)}
+        userService={new UserService(httpService)}
+      >
         <UserProvider userService={new UserService(httpService)}>
           <RootLayout />
         </UserProvider>

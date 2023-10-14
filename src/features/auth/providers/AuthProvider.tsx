@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IAuthService } from "../service/auth-service";
 import {
   CustomError,
@@ -11,6 +11,8 @@ import {
 import { AxiosError } from "axios";
 import useAuthStore from "@/stores/auth-store";
 import storage from "@/storage";
+import { IUserService } from "@/features/user/service/user-service";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextProps {
   login(
@@ -32,14 +34,21 @@ export const AuthContext = createContext<AuthContextProps | undefined>(
 
 interface AuthProviderProps {
   children: React.ReactNode;
+  userService: IUserService;
   authService: IAuthService;
 }
 
-export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
+export const AuthProvider = ({
+  children,
+  userService,
+  authService,
+}: AuthProviderProps) => {
   const [error, setError] = useState<CustomError>();
   const isLogin = useAuthStore((state) => state.isLogin);
   const signIn = useAuthStore((state) => state.signIn);
   const signOut = useAuthStore((state) => state.signOut);
+  const navigate = useNavigate();
+  const [prevLocation] = useState(location.pathname);
 
   const login = async (request: LoginParams) => {
     try {
@@ -69,6 +78,34 @@ export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
       setError(_error.response.data);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await userService.profile();
+        signIn();
+      } catch (error) {
+        if (location.pathname.includes("/auth")) return;
+        navigate("/auth/login");
+        signOut();
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!isLogin) {
+      if (location.pathname.includes("/auth")) return;
+      navigate("/auth/login");
+      return;
+    }
+
+    if (prevLocation.includes("/auth") || prevLocation === "/") {
+      navigate("/board/boards");
+      return;
+    }
+
+    navigate(prevLocation);
+  }, [isLogin]);
 
   return (
     <AuthContext.Provider
