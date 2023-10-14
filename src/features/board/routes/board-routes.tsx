@@ -1,6 +1,7 @@
 import { RouteObject } from "react-router-dom";
 import BoardLayout from "../layout/BoardLayout";
-import { Boards } from "..";
+import { Board, Boards } from "..";
+import Temp from "../pages/Temp";
 
 const boardRoutes: RouteObject[] = [
   {
@@ -10,6 +11,14 @@ const boardRoutes: RouteObject[] = [
       {
         path: "boards",
         element: <Boards />,
+      },
+      {
+        path: "boards/:id",
+        element: <Board />,
+      },
+      {
+        path: "temp",
+        element: <Temp />,
       },
     ],
   },
