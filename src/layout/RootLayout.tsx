@@ -1,6 +1,6 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useUser } from "@/features/user/hooks/useUser";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const RootLayout = () => {
@@ -9,6 +9,8 @@ const RootLayout = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [prevLocation] = useState(location.pathname);
 
   useEffect(() => {
     (async () => {
@@ -23,9 +25,23 @@ const RootLayout = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!isLogin) {
+      if (location.pathname.includes("/auth")) return;
+      navigate("/auth/login");
+      return;
+    }
+
+    if (prevLocation.includes("/auth") || prevLocation === "/") {
+      navigate("/board/boards");
+      return;
+    }
+
+    navigate(prevLocation);
+  }, [isLogin]);
+
   return (
     <div>
-      <h2>gg</h2>
       {userProfile?.username}
       <Outlet />
     </div>
