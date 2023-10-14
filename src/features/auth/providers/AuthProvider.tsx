@@ -10,6 +10,7 @@ import {
 } from "../types";
 import { AxiosError } from "axios";
 import useAuthStore from "@/stores/auth-store";
+import storage from "@/storage";
 
 interface AuthContextProps {
   login(
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children, authService }: AuthProviderProps) => {
   const login = async (request: LoginParams) => {
     try {
       const response = await authService.login(request);
+      storage.setItem(response.data.accessToken);
 
       return response;
     } catch (error: unknown) {
