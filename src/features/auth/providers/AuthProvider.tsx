@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { IAuthService } from "../service/auth-service";
 import {
+  ForgotPsswordParams,
   LoginParams,
   LoginResponse,
   RegisterParams,
@@ -23,12 +24,14 @@ interface AuthContextProps {
   register(
     request: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse> | undefined>;
+
   error: CustomError | undefined;
   isLogin: boolean;
   signIn: () => void;
   signOut: () => void;
   userProfile: UserProfile | undefined;
   setUserProfile: (userProfile: UserProfile) => void;
+  forgotPassword(request: ForgotPsswordParams): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -91,6 +94,18 @@ export const AuthProvider = ({
     }
   };
 
+  const forgotPassword = async (request: ForgotPsswordParams) => {
+    try {
+      const response = await authService.forgetPassword(request);
+
+      return response;
+    } catch (error: unknown) {
+      const _error = error as AxiosError<CustomError>;
+      if (!_error.response) return;
+      setError(_error.response.data);
+    }
+  };
+
   const getProfile = async () => {
     try {
       const response = await userService.profile();
@@ -131,6 +146,7 @@ export const AuthProvider = ({
         signOut,
         userProfile,
         setUserProfile,
+        forgotPassword,
       }}
     >
       {children}
