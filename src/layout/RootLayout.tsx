@@ -1,9 +1,10 @@
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import storage from "@/storage";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const RootLayout = () => {
   const { userProfile, logout, signOut, isLogin } = useAuth();
+  const navigate = useNavigate();
 
   const handleClickLogoutButton = async () => {
     await logout();
@@ -11,6 +12,8 @@ const RootLayout = () => {
     storage.removeItem();
 
     signOut();
+
+    navigate("/auth/login");
   };
 
   return (
