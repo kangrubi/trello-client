@@ -91,21 +91,6 @@ export const AuthProvider = ({
     })();
   }, []);
 
-  useEffect(() => {
-    if (!isLogin) {
-      if (location.pathname.includes("/auth")) return;
-      navigate("/auth/login");
-      return;
-    }
-
-    if (prevLocation.includes("/auth") || prevLocation === "/") {
-      navigate("/board/boards");
-      return;
-    }
-
-    navigate(prevLocation);
-  }, [isLogin]);
-
   return (
     <AuthContext.Provider
       value={{
