@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_URL } from "@/config";
+import { RefreshResponse } from "@/features/auth/types";
 import storage from "@/storage";
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { CustomError, PublicApiResponse } from "@/types";
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 export interface IHttpService {
   request<T>(config: any): Promise<T>;
@@ -35,10 +42,26 @@ class HttpService implements IHttpService {
     );
 
     this.setResponseInterceptor(
-      (response) => {
+      (response: AxiosResponse): AxiosResponse => {
         return response;
       },
-      (error) => {
+      async (error: AxiosError | Error): Promise<AxiosError> => {
+        const _error = error as AxiosError<CustomError>;
+
+        const { response } = _error;
+
+        const originalConfig = response?.config as AxiosRequestConfig;
+
+        if (response?.status === 401) {
+          const response = await axios.get<PublicApiResponse<RefreshResponse>>(
+            `${API_URL}/api/auth/v1/refresh`
+          );
+
+          storage.setItem(response.data.data.accessToken);
+
+          return this.axiosInstance(originalConfig);
+        }
+
         return Promise.reject(error);
       }
     );
