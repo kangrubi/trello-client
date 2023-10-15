@@ -7,7 +7,9 @@ const RootLayout = () => {
 
   const handleClickLogoutButton = async () => {
     await logout();
+
     storage.removeItem();
+
     signOut();
   };
 
