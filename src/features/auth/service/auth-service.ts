@@ -1,5 +1,6 @@
 import { IHttpService } from "@/lib/http";
 import {
+  ForgotPsswordParams,
   LoginParams,
   LoginResponse,
   RegisterParams,
@@ -13,10 +14,15 @@ export interface IAuthService {
   register(
     params: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse>>;
+  forgetPassword(params: ForgotPsswordParams): Promise<void>;
 }
 
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
+
+  async forgetPassword(params: ForgotPsswordParams): Promise<void> {
+    await this.httpService.post("/api/v1/auth/forgot-password", params);
+  }
 
   async login(params: LoginParams): Promise<PublicApiResponse<LoginResponse>> {
     const response = await this.httpService.post<
