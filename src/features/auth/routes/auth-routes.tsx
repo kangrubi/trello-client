@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import AuthLayout from "../layout/AuthLayout";
-import { Login, Register } from "..";
+import { ForgotPassword, Login, Register } from "..";
 
 const authRoutes: RouteObject[] = [
   {
@@ -14,6 +14,10 @@ const authRoutes: RouteObject[] = [
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "forgotpassword",
+        element: <ForgotPassword />,
       },
     ],
   },
