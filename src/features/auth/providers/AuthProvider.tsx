@@ -1,10 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { IAuthService } from "../service/auth-service";
 import {
-  CustomError,
   LoginParams,
   LoginResponse,
-  PublicApiResponse,
   RegisterParams,
   RegisterResponse,
 } from "../types";
@@ -13,6 +11,7 @@ import useAuthStore from "@/stores/auth-store";
 import storage from "@/storage";
 import { IUserService } from "@/features/user/service/user-service";
 import { useNavigate } from "react-router-dom";
+import { CustomError, PublicApiResponse } from "@/types";
 
 interface AuthContextProps {
   login(

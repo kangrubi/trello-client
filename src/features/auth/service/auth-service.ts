@@ -2,10 +2,10 @@ import { IHttpService } from "@/lib/http";
 import {
   LoginParams,
   LoginResponse,
-  PublicApiResponse,
   RegisterParams,
   RegisterResponse,
 } from "../types";
+import { PublicApiResponse } from "@/types";
 
 export interface IAuthService {
   login(params: LoginParams): Promise<PublicApiResponse<LoginResponse>>;

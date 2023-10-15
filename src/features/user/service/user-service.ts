@@ -1,4 +1,4 @@
-import { PublicApiResponse } from "../../auth/types/index";
+import { PublicApiResponse } from "@/types";
 import { ProfileResponse } from "../types";
 import { IHttpService } from "@/lib/http";
 

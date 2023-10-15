@@ -1,9 +1,9 @@
 import React, { createContext, useState } from "react";
-import { CustomError, PublicApiResponse } from "../../auth/types/index";
 import { ProfileResponse, UserProfile } from "../types";
 import { IUserService } from "../service/user-service";
 import useUserStore from "@/stores/user-store";
 import { AxiosError } from "axios";
+import { CustomError, PublicApiResponse } from "@/types";
 
 interface UserContextProps {
   profile(): Promise<PublicApiResponse<ProfileResponse> | undefined>;
