@@ -125,7 +125,7 @@ const Login = () => {
             </div>
             <div className="flex items-center justify-center gap-4 text-sm">
               <Link to="/auth/register">계정 만들기</Link>
-              <Link to="/auth/resetpassword">비밀번호 찾기</Link>
+              <Link to="/auth/forgotpassword">비밀번호 찾기</Link>
             </div>
           </form>
         </Form>
