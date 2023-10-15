@@ -28,21 +28,6 @@ const RootLayout = () => {
     navigate("/auth/login");
   };
 
-  useEffect(() => {
-    if (!isLogin) {
-      if (location.pathname.includes("/auth")) return;
-      navigate("/auth/login");
-      return;
-    }
-
-    if (prevLocation.includes("/auth") || prevLocation === "/") {
-      navigate("/board/list");
-      return;
-    }
-
-    navigate(prevLocation);
-  }, [isLogin]);
-
   return (
     <div className="root-layout">
       <div>
