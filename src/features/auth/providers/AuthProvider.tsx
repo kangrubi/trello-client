@@ -12,6 +12,8 @@ import storage from "@/storage";
 import { IUserService } from "@/features/user/service/user-service";
 import { useNavigate } from "react-router-dom";
 import { CustomError, PublicApiResponse } from "@/types";
+import useUserStore from "@/stores/user-store";
+import { UserProfile } from "@/features/user/types";
 
 interface AuthContextProps {
   login(
@@ -25,6 +27,8 @@ interface AuthContextProps {
   isLogin: boolean;
   signIn: () => void;
   signOut: () => void;
+  userProfile: UserProfile | undefined;
+  setUserProfile: (userProfile: UserProfile) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -46,6 +50,8 @@ export const AuthProvider = ({
   const isLogin = useAuthStore((state) => state.isLogin);
   const signIn = useAuthStore((state) => state.signIn);
   const signOut = useAuthStore((state) => state.signOut);
+  const userProfile = useUserStore((state) => state.userProfile);
+  const setUserProfile = useUserStore((state) => state.setUserProfile);
   const navigate = useNavigate();
 
   const login = async (request: LoginParams) => {
@@ -62,7 +68,15 @@ export const AuthProvider = ({
   };
 
   const logout = async () => {
-    authService.logout();
+    try {
+      const response = await authService.logout();
+
+      return response;
+    } catch (error: unknown) {
+      const _error = error as AxiosError<CustomError>;
+      if (!_error.response) return;
+      setError(_error.response.data);
+    }
   };
 
   const register = async (request: RegisterParams) => {
@@ -77,10 +91,25 @@ export const AuthProvider = ({
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const response = await userService.profile();
+
+      setUserProfile(response.data);
+
+      return response;
+    } catch (error: unknown) {
+      const _error = error as AxiosError<CustomError>;
+      if (!_error.response) return;
+      setError(_error.response.data);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
-        await userService.profile();
+        await getProfile();
         signIn();
       } catch (error) {
         if (location.pathname.includes("/auth")) return;
@@ -100,6 +129,8 @@ export const AuthProvider = ({
         isLogin,
         signIn,
         signOut,
+        userProfile,
+        setUserProfile,
       }}
     >
       {children}
