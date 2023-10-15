@@ -1,8 +1,3 @@
-export interface PublicApiResponse<T> {
-  statusCode: number;
-  timestamp: string;
-  data: T;
-}
 export interface RegisterResponse {
   username: string;
   email: string;
@@ -15,17 +10,6 @@ export interface RegisterParams {
   password: string;
 }
 
-export interface CustomError {
-  statusCode: number;
-  message: {
-    message: string;
-    error: string;
-    statusCode: number;
-  };
-  timestamp: string;
-  path: string;
-}
-
 export interface LoginResponse {
   accessToken: string;
 }
@@ -33,4 +17,8 @@ export interface LoginResponse {
 export interface LoginParams {
   email: string;
   password: string;
+}
+
+export interface RefreshResponse {
+  accessToken: string;
 }
