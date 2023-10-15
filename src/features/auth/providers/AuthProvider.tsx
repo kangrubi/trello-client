@@ -47,7 +47,6 @@ export const AuthProvider = ({
   const signIn = useAuthStore((state) => state.signIn);
   const signOut = useAuthStore((state) => state.signOut);
   const navigate = useNavigate();
-  const [prevLocation] = useState(location.pathname);
 
   const login = async (request: LoginParams) => {
     try {
