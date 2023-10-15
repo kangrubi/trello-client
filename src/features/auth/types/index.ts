@@ -22,3 +22,7 @@ export interface LoginParams {
 export interface RefreshResponse {
   accessToken: string;
 }
+
+export interface ForgotPsswordParams {
+  email: string;
+}
