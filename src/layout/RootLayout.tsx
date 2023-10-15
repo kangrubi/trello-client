@@ -1,12 +1,27 @@
-import { useUser } from "@/features/user/hooks/useUser";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import storage from "@/storage";
 import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
-  const { userProfile } = useUser();
+  const { userProfile, logout, signOut, isLogin } = useAuth();
+
+  const handleClickLogoutButton = async () => {
+    await logout();
+    storage.removeItem();
+    signOut();
+  };
 
   return (
     <div>
-      {userProfile?.username}
+      {isLogin && (
+        <>
+          {userProfile?.username}
+          <button type="button" onClick={handleClickLogoutButton}>
+            로그아웃
+          </button>
+        </>
+      )}
+
       <Outlet />
     </div>
   );
