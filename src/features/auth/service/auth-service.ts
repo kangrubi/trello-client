@@ -27,7 +27,7 @@ export class AuthService implements IAuthService {
   }
 
   async logout(): Promise<void> {
-    console.log("logout");
+    await this.httpService.post("/api/v1/auth/logout");
   }
 
   async register(
