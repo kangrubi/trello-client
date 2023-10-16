@@ -43,7 +43,7 @@ const ForgotPassword = () => {
     <div className="flex items-center justify-center h-screen">
       <div className="w-96 rounded-lg border bg-card text-card-foreground shadow-sm p-6">
         <Form {...form}>
-          <form onClick={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="email"
@@ -73,7 +73,7 @@ const ForgotPassword = () => {
                     비밀번호 찾기
                   </Button>
                 </AlertDialogTrigger>
-                {error && (
+                {error?.path === "/api/v1/auth/forgot-password" && (
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>{error.message.error}</AlertDialogTitle>
