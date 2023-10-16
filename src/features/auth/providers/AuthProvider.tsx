@@ -6,6 +6,8 @@ import {
   LoginResponse,
   RegisterParams,
   RegisterResponse,
+  ResetCustomError,
+  ResetPasswordParams,
 } from "../types";
 import { AxiosError } from "axios";
 import useAuthStore from "@/stores/auth-store";
@@ -26,12 +28,14 @@ interface AuthContextProps {
   ): Promise<PublicApiResponse<RegisterResponse> | undefined>;
 
   error: CustomError | undefined;
+  resetPasswordError: ResetCustomError | undefined;
   isLogin: boolean;
   signIn: () => void;
   signOut: () => void;
   userProfile: UserProfile | undefined;
   setUserProfile: (userProfile: UserProfile) => void;
   forgotPassword(request: ForgotPsswordParams): Promise<void>;
+  resetPassword(request: ResetPasswordParams): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -50,6 +54,8 @@ export const AuthProvider = ({
   authService,
 }: AuthProviderProps) => {
   const [error, setError] = useState<CustomError>();
+  const [resetPasswordError, setResetPasswordError] =
+    useState<ResetCustomError>();
   const isLogin = useAuthStore((state) => state.isLogin);
   const signIn = useAuthStore((state) => state.signIn);
   const signOut = useAuthStore((state) => state.signOut);
@@ -106,6 +112,18 @@ export const AuthProvider = ({
     }
   };
 
+  const resetPassword = async (request: ResetPasswordParams) => {
+    try {
+      const response = await authService.resetPassword(request);
+
+      return response;
+    } catch (error: unknown) {
+      const _error = error as AxiosError<ResetCustomError>;
+      if (!_error.response) return;
+      setResetPasswordError(_error.response.data);
+    }
+  };
+
   const getProfile = async () => {
     try {
       const response = await userService.profile();
@@ -138,6 +156,7 @@ export const AuthProvider = ({
     <AuthContext.Provider
       value={{
         error,
+        resetPasswordError,
         login,
         logout,
         register,
@@ -147,6 +166,7 @@ export const AuthProvider = ({
         userProfile,
         setUserProfile,
         forgotPassword,
+        resetPassword,
       }}
     >
       {children}

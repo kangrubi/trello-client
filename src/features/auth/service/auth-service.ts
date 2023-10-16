@@ -5,6 +5,7 @@ import {
   LoginResponse,
   RegisterParams,
   RegisterResponse,
+  ResetPasswordParams,
 } from "../types";
 import { PublicApiResponse } from "@/types";
 
@@ -15,10 +16,15 @@ export interface IAuthService {
     params: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse>>;
   forgetPassword(params: ForgotPsswordParams): Promise<void>;
+  resetPassword(params: ResetPasswordParams): Promise<void>;
 }
 
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
+
+  async resetPassword(params: ResetPasswordParams): Promise<void> {
+    await this.httpService.post("/api/v1/auth/reset-password", params);
+  }
 
   async forgetPassword(params: ForgotPsswordParams): Promise<void> {
     await this.httpService.post("/api/v1/auth/forgot-password", params);

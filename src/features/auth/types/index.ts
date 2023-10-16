@@ -26,3 +26,15 @@ export interface RefreshResponse {
 export interface ForgotPsswordParams {
   email: string;
 }
+
+export interface ResetPasswordParams {
+  token: string;
+  password: string;
+}
+
+export interface ResetCustomError {
+  message: string;
+  path: string;
+  statusCode: number;
+  timestamp: string;
+}
