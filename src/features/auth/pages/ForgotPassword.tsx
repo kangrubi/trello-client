@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const { error, forgotPassword } = useAuth();
@@ -70,7 +71,7 @@ const ForgotPassword = () => {
                     variant="outline"
                     className="w-full bg-black text-white"
                   >
-                    비밀번호 찾기
+                    비밀번호 변경 링크 보내기
                   </Button>
                 </AlertDialogTrigger>
                 {error?.path === "/api/v1/auth/forgot-password" && (
@@ -87,6 +88,11 @@ const ForgotPassword = () => {
                   </AlertDialogContent>
                 )}
               </AlertDialog>
+            </div>
+            <div className="flex items-center justify-center text-sm">
+              <Link to="/auth/login" className="hover:underline">
+                로그인으로 돌아가기
+              </Link>
             </div>
           </form>
         </Form>
