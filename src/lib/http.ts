@@ -54,7 +54,7 @@ class HttpService implements IHttpService {
 
         if (response?.status === 401) {
           const response = await axios.get<PublicApiResponse<RefreshResponse>>(
-            `${API_URL}/api/auth/v1/refresh`
+            `${API_URL}/api/v1/auth/refresh`
           );
 
           storage.setItem(response.data.data.accessToken);
