@@ -34,7 +34,9 @@ interface AuthContextProps {
   signOut: () => void;
   userProfile: UserProfile | undefined;
   setUserProfile: (userProfile: UserProfile) => void;
-  forgotPassword(request: ForgotPsswordParams): Promise<void>;
+  forgotPassword(
+    request: ForgotPsswordParams
+  ): Promise<PublicApiResponse<void> | undefined>;
   resetPassword(request: ResetPasswordParams): Promise<void>;
 }
 
@@ -102,7 +104,7 @@ export const AuthProvider = ({
 
   const forgotPassword = async (request: ForgotPsswordParams) => {
     try {
-      const response = await authService.forgetPassword(request);
+      const response = await authService.forgotPassword(request);
 
       return response;
     } catch (error: unknown) {

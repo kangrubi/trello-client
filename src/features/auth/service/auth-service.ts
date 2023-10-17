@@ -15,7 +15,7 @@ export interface IAuthService {
   register(
     params: RegisterParams
   ): Promise<PublicApiResponse<RegisterResponse>>;
-  forgetPassword(params: ForgotPsswordParams): Promise<void>;
+  forgotPassword(params: ForgotPsswordParams): Promise<PublicApiResponse<void>>;
   resetPassword(params: ResetPasswordParams): Promise<void>;
 }
 
@@ -26,8 +26,15 @@ export class AuthService implements IAuthService {
     await this.httpService.post("/api/v1/auth/reset-password", params);
   }
 
-  async forgetPassword(params: ForgotPsswordParams): Promise<void> {
-    await this.httpService.post("/api/v1/auth/forgot-password", params);
+  async forgotPassword(
+    params: ForgotPsswordParams
+  ): Promise<PublicApiResponse<void>> {
+    const response = await this.httpService.post<PublicApiResponse<void>>(
+      "/api/v1/auth/forgot-password",
+      params
+    );
+
+    return response;
   }
 
   async login(params: LoginParams): Promise<PublicApiResponse<LoginResponse>> {
