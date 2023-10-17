@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import forgotPasswordSchema from "../schema/forgotPassword-schema";
@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const { error, forgotPassword } = useAuth();
+  const [successAlert, setSuccessAlert] = useState<string>("");
 
   const form = useForm<z.infer<typeof forgotPasswordSchema>>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -37,7 +38,13 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
-    await forgotPassword(data);
+    const response = await forgotPassword(data);
+
+    if (!response) return;
+
+    if (response.statusCode === 200) {
+      setSuccessAlert("비밀번호 변경 링크를 다음 이메일 주소로 보냈습니다");
+    }
   };
 
   return (
@@ -80,6 +87,19 @@ const ForgotPassword = () => {
                       <AlertDialogTitle>{error.message.error}</AlertDialogTitle>
                       <AlertDialogDescription>
                         {error.message.message}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                )}
+                {successAlert && (
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Success</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {successAlert}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
