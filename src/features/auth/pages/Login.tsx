@@ -108,7 +108,7 @@ const Login = () => {
                     Login
                   </Button>
                 </AlertDialogTrigger>
-                {error && (
+                {error?.path === "/api/v1/auth/login" && (
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>{error.message.error}</AlertDialogTitle>
